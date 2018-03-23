@@ -1,0 +1,2561 @@
+<!DOCTYPE html>
+<!--	
+	Human Body Generator v0.9.0 - Builds a randomized human being in SVG.
+	Copyright (C) 2018 Sara Gleghorn
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+	
+	-->
+
+<html>
+    <head>
+	    <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+        <title>Human Being Generator</title>
+		<script type = "text/javascript" src = "body-generator.js"></script>
+		
+		<style>
+		/*Semantic Elements*/
+			body{
+				background-color:#cccccc;
+			}
+			header{
+				background-color: #aaaaaa;
+				border-bottom: 1px solid black;
+				box-sizing:border-box;
+				margin:auto;
+				padding:6px;
+				width:960px;
+			}
+
+			main{
+				display:block;
+				margin:auto;
+				width:960px;
+			}
+
+			form{
+				border:1px solid black;
+				box-sizing:border-box;
+				display:block;
+				font-family: "Lucida Console",Monaco,monospace;
+				margin:3px;
+				padding:3px;
+			}
+
+			input{
+				margin: 3px;
+				text-align:right;
+				width: 72px;
+			}
+
+			summary{
+				margin:6px;
+			}
+
+			/*formlists*/
+			form ul{
+				list-style:none;
+				margin:0 3px;
+				padding:0px;
+			}
+
+			form ul li{
+				display:inline-block;
+				margin:0 3px;
+			}
+			
+			.block{
+				display:block;
+				margin:0px 6px;
+			}
+
+			.drawing{
+				background-color:#eeeeee;
+				border:1px solid #000;
+				height:600px;
+				margin:12px;
+				width:400px;
+			}
+
+
+			.gradientsused{
+				background-color:#eeeeee;
+				border:1px solid #999999;
+				display: inline-block;
+				height:6px;
+				margin: 0px 6px;
+			}
+
+			.longbox{
+				width:512px;
+			}
+
+		</style>
+</head>
+<body>
+    <header>
+    <h1>Random Human Generator</h1>
+	<p>For generating random human faces for characters</p>
+    </header>
+    <main>
+        <section class="drawing float-left">
+            <svg id="svgcanvas" version="1.1" xmlns="http://www.w3.org/2000/svg" width="400" height="600">
+                <style>
+                    line{
+                        stroke:#111111;
+                    }
+                </style>
+                <!--Gridlines-->
+                <g id="grpgridlines">
+                    <line x1="0" y1="29.5" x2="400" y2="29.5"></line>
+                    <line x1="0" y1="59.5" x2="400" y2="59.5"></line>
+                    <line x1="0" y1="89.5" x2="400" y2="89.5"></line>
+                    <line x1="0" y1="119.5" x2="400" y2="119.5"></line>
+                    <line x1="0" y1="149.5" x2="400" y2="149.5"></line>
+                    <line x1="0" y1="179.5" x2="400" y2="179.5"></line>
+                    <line x1="0" y1="209.5" x2="400" y2="209.5"></line>
+                    <line x1="0" y1="239.5" x2="400" y2="239.5"></line>
+                    <line x1="0" y1="269.5" x2="400" y2="269.5"></line>
+                    <line x1="0" y1="299.5" x2="400" y2="299.5"></line>
+                    <line x1="0" y1="329.5" x2="400" y2="329.5"></line>
+                    <line x1="0" y1="359.5" x2="400" y2="359.5"></line>
+                    <line x1="0" y1="389.5" x2="400" y2="389.5"></line>
+                    <line x1="0" y1="419.5" x2="400" y2="419.5"></line>
+                    <line x1="0" y1="449.5" x2="400" y2="449.5"></line>
+                    <line x1="0" y1="479.5" x2="400" y2="479.5"></line>
+                    <line x1="0" y1="509.5" x2="400" y2="509.5"></line>
+                    <line x1="0" y1="539.5" x2="400" y2="539.5"></line>
+                    <line x1="0" y1="569.5" x2="400" y2="569.5"></line>
+                    <line x1="0" y1="599.5" x2="400" y2="599.5"></line>
+                    <line x1="200" y1="0" x2="200" y2="600"></line>
+                </g>
+                <g id="grpdrawing">
+                </g>
+            </svg>
+		</section>
+		
+		<section id="options float-left">
+			<h2>Options</h2>
+			<input type="submit" value"hello"="" onclick="drawHuman()">
+			<details open id="gender">
+				<summary>Gender</summary>
+			
+                <input type="radio" name="gender" id="female" value="female" checked="checked" onclick="hideShow()">Female<br>
+                <input type="radio" name="gender" id="male" value="male" onclick="hideShow()" >Male<br>
+                <input type="radio" name="gender" id="blendcomplex" value="blendcomplex" onclick="hideShow()">Blend Complex*<br>
+                <input type="radio" name="gender" id="blendsimple" value="blendsimple" onclick="hideShow()">Blend Simple*<br>					
+			</details>
+			<p>The blended options will give you an androgenous figure. Blend Simple just goes halfway between the male and female minimum, maximum and average measurements, so gives a smoother result. Blend complex actually recalculates the data for all participants, therefore allowing for greater extremes and some more unique figures.
+		</section>
+		
+		
+		
+		<section class="coloursused">
+			<h5>Skintone:</h5>
+			<canvas class="gradientsused longbox" id="skinvaluegradient">
+			</canvas>
+			<canvas class="gradientsused longbox" id="skincolorgradient">
+			</canvas>
+			<canvas class="gradientsused" id="skinvaluecolor" style="width:6px">
+			</canvas>
+			*
+			<canvas class="gradientsused " id="skincolorcolor" style="width:6px">
+			</canvas>
+			=
+			<canvas class="gradientsused" id="finalskintone" style="width:84px">
+			</canvas>
+			<!--
+			<h5>Eye Colour:</h5>
+			<canvas class="gradientsused longbox" id="eyecolorgradient" >
+			</canvas>
+			<canvas class="gradientsused longbox" id="eyevaluegradient" >
+			</canvas>
+			<canvas class="gradientsused" id="eyecolorcolor" style="width:6px">
+			</canvas>
+			*
+			<canvas class="gradientsused" id="eyevaluecolor" style="width:6px">
+			</canvas>
+			=
+			<canvas class="gradientsused" id="finaleyecolour" style="width:84px">
+			</canvas>
+			<h5>Hair Colour:</h5>
+			<canvas class="gradientsused longbox" id="hairvaluegradient" >
+			</canvas>
+
+			<canvas class="gradientsused longbox" id="haircolorgradient">
+			</canvas>
+			<canvas class="gradientsused" id="hairvaluecolor" style="width:6px">
+			</canvas>
+			*
+			<canvas class="gradientsused" id="haircolorcolor" style="width:6px">
+			</canvas>
+			=
+			<canvas class="gradientsused" id="finalhaircolour" style="width:84px">
+			</canvas>
+			-->
+			<h5><span>Height: </span><span id="pheight">xxx</span></h5>
+			<div class="clear"> </div>
+        </section>
+		<div class="clear"></div>	
+
+		<section class="options">
+			<summary>Measurement Options</summary>
+			<details>
+<!--BODY: Mostly box model co-ordinates, based on caliper measurements from ANSUR-->
+<!--Height-->
+<!--Effectively Total Height x Forearm to Forearm-->
+				<details id="height">
+					<summary>Height</summary>
+					Method:<select disabled id="heightmethod" name="method">
+						<option value="absolute" selected>Absolute</option>
+						<option value="relative">Relative</option>
+					</select>
+					Parent: x = None, y = None, z = None.
+		<!--Blend Complex-->
+					<form class="block" name="blendcomplex">
+						<strong>Blend Complex</strong><br>
+						<ul>
+							<li>X-Num : <input disabled type="number" name="x" value=0></input>mm<br></li>
+							<li>Y-Num : <input type="number" name="y" value=1686></input>mm<br></li>
+							<li>Z-Num : <input disabled type="number" name="z" value=0></input>mm<br></li>
+						</ul>
+						<ul>	
+							<li>X-SDv : <input disabled type="number" name="x_sd" value=0></input>mm<br></li>
+							<li>Y-SDv : <input type="number" name="y_sd" value=90></input>mm<br></li>
+							<li>Z-SDv : <input disabled type="number" name="z_sd" value=0></input>mm<br></li>
+						</ul>
+						<ul>	
+							<li>X-Min : <input disabled type="number" name="x_min" value=0></input>mm<br></li>
+							<li>Y-Min : <input type="number" name="y_min" value=1428></input>mm<br></li>
+							<li>Z-Min : <input disabled type="number" name="z_min" value=0></input>mm<br></li>
+						</ul>
+						<ul>	
+							<li>X-Max : <input disabled type="number" name="x_max" value=0></input>mm<br></li>
+							<li>Y-Max : <input type="number" name="y_max" value=2042></input>mm<br></li>
+							<li>Z-Max : <input disabled type="number" name="z_max" value=0></input>mm<br></li>
+						</ul>
+					</form>
+		<!--Blend Simple-->
+					<form class="block" name="blendsimple">
+						<strong>Blend Simple</strong><br>
+						<ul>
+							<li>X-Num : <input disabled type="number" name="x" value=0></input>mm<br></li>
+							<li>Y-Num : <input type="number" name="y" value=1693></input>mm<br></li>
+							<li>Z-Num : <input disabled type="number" name="z" value=0></input>mm<br></li>
+						</ul>
+						<ul>	
+							<li>X-SDv : <input disabled type="number" name="x_sd" value=0></input>mm<br></li>
+							<li>Y-SDv : <input type="number" name="y_sd" value=65></input>mm<br></li>
+							<li>Z-SDv : <input disabled type="number" name="z_sd" value=0></input>mm<br></li>
+						</ul>
+						<ul>	
+							<li>X-Min : <input disabled type="number" name="x_min" value=0></input>mm<br></li>
+							<li>Y-Min : <input type="number" name="y_min" value=1463></input>mm<br></li>
+							<li>Z-Min : <input disabled type="number" name="z_min" value=0></input>mm<br></li>
+						</ul>
+						<ul>	
+							<li>X-Max : <input disabled type="number" name="x_max" value=0></input>mm<br></li>
+							<li>Y-Max : <input type="number" name="y_max" value=1956></input>mm<br></li>
+							<li>Z-Max : <input disabled type="number" name="z_max" value=0></input>mm<br></li>
+						</ul>
+					</form>
+		<!--Female-->
+					<form class="block" name="female">
+						<strong>Female</strong><br>
+						<ul>
+							<li>X-Num : <input disabled type="number" name="x" value=0></input>mm<br></li>
+							<li>Y-Num : <input type="number" name="y" value=1629></input>mm<br></li>
+							<li>Z-Num : <input disabled type="number" name="z" value=0></input>mm<br></li>
+						</ul>
+						<ul>	
+							<li>X-SDv : <input disabled type="number" name="x_sd" value=0></input>mm<br></li>
+							<li>Y-SDv : <input type="number" name="y_sd" value=64></input>mm<br></li>
+							<li>Z-SDv : <input disabled type="number" name="z_sd" value=0></input>mm<br></li>
+						</ul>
+						<ul>	
+							<li>X-Min : <input disabled type="number" name="x_min" value=0></input>mm<br></li>
+							<li>Y-Min : <input type="number" name="y_min" value=1428></input>mm<br></li>
+							<li>Z-Min : <input disabled type="number" name="z_min" value=0></input>mm<br></li>
+						</ul>
+						<ul>	
+							<li>X-Max : <input disabled type="number" name="x_max" value=0></input>mm<br></li>
+							<li>Y-Max : <input type="number" name="y_max" value=1870></input>mm<br></li>
+							<li>Z-Max : <input disabled type="number" name="z_max" value=0></input>mm<br></li>
+						</ul>
+					</form>
+		<!--Male-->
+					<form class="block" name="male">
+						<strong>Male</strong><br>
+						<ul>
+							<li>X-Num : <input disabled type="number" name="x" value=0></input>mm<br></li>
+							<li>Y-Num : <input type="number" name="y" value=1756></input>mm<br></li>
+							<li>Z-Num : <input disabled type="number" name="z" value=0></input>mm<br></li>
+						</ul>
+						<ul>	
+							<li>X-SDv : <input disabled type="number" name="x_sd" value=0></input>mm<br></li>
+							<li>Y-SDv : <input type="number" name="y_sd" value=67></input>mm<br></li>
+							<li>Z-SDv : <input disabled type="number" name="z_sd" value=0></input>mm<br></li>
+						</ul>
+						<ul>	
+							<li>X-Min : <input disabled type="number" name="x_min" value=0></input>mm<br></li>
+							<li>Y-Min : <input type="number" name="y_min" value=1497></input>mm<br></li>
+							<li>Z-Min : <input disabled type="number" name="z_min" value=0></input>mm<br></li>
+						</ul>
+						<ul>	
+							<li>X-Max : <input disabled type="number" name="x_max" value=0></input>mm<br></li>
+							<li>Y-Max : <input type="number" name="y_max" value=2042></input>mm<br></li>
+							<li>Z-Max : <input disabled type="number" name="z_max" value=0></input>mm<br></li>
+						</ul>
+					</form>
+				</details>	
+	<!--Span-->
+				<details id="handspan">
+					<summary>Hand Span</summary>
+					Method:<select disabled id="handspanmethod" name="method">
+						<option value="absolute" >Absolute</option>
+						<option value="relative" selected>Relative</option>
+					</select>
+					Parent: x = height[y], y = none, z = none.
+					<!--Blend Complex-->
+					<form class="block" name="blendcomplex">
+						<strong>Blend Complex</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=1.03 min=0></input>*<br></li>
+								<li>Y-Num : <input disabled type="number" name="y" value=0 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.03 min=0 ></input>*<br></li>
+								<li>Y-SDv : <input disabled type="number" name="y_sd" value=0 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=0.93 min=0></input>*<br></li>
+								<li>Y-Min : <input disabled type="number" name="y_min" value=0 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=1.14 min=0></input>*<br></li>
+								<li>Y-Max : <input disabled type="number" name="y_max" value=0 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Blend Simple-->
+					<form class="block" name="blendsimple">
+						<strong>Blend Simple</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=1.03 min=0></input>*<br></li>
+								<li>Y-Num : <input disabled type="number" name="y" value=0 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.03 min=0 ></input>*<br></li>
+								<li>Y-SDv : <input disabled type="number" name="y_sd" value=0 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=0.95 min=0></input>*<br></li>
+								<li>Y-Min : <input disabled type="number" name="y_min" value=0 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=1.13 min=0></input>*<br></li>
+								<li>Y-Max : <input disabled type="number" name="y_max" value=0 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Female-->
+					<form class="block" name="female">
+						<strong>Female</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=1.03 min=0 ></input>*<br></li>
+								<li>Y-Num : <input disabled type="number" name="y" value=0 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.03 min=0 ></input>*<br></li>
+								<li>Y-SDv : <input disabled type="number" name="y_sd" value=0 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=0.93 min=0></input>*<br></li>
+								<li>Y-Min : <input disabled type="number" name="y_min" value=0 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=1.14 min=0></input>*<br></li>
+								<li>Y-Max : <input disabled type="number" name="y_max" value=0 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Male-->
+					<form class="block" name="male">
+						<strong>Male</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=1.04 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input disabled type="number" name="y" value=0 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.03 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input disabled type="number" name="y_sd" value=0 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=0.96 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input disabled type="number" name="y_min" value=0 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=1.13 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input disabled type="number" name="y_max" value=0 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+				   </details>
+	<!--Hips-->
+				<details id="hips">
+					<summary>Hips</summary>
+					Method:<select disabled id="hipsmethod" name="method">
+						<option value="absolute">Absolute</option>
+						<option value="relative" selected>Relative</option>
+					</select>
+					Parent: x = handspan[x], y = height[y], z = none
+					<!--Blend Complex-->
+					<form class="block" name="blendcomplex">
+						<strong>Blend Complex</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=0.2 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.53 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.02 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.01 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=0.15 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.47 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=0.27 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=0.58 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Blend Simple-->
+					<form class="block" name="blendsimple">
+						<strong>Blend Simple</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=0.2 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.53 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.01 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.01 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=0.16 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.47 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=0.25 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=0.58 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Female-->
+					<form class="block" name="female">
+						<strong>Female</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=0.21 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.53 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.01 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.02 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=0.16 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.47 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=0.27 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=0.58 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Male-->
+					<form class="block" name="male">
+						<strong>Male</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=0.19 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.53 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.01 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.01 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=0.15 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.48 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=0.24 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=0.58 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+				   </details>
+	<!--Acromion-->
+				<details id="acromion">
+					<summary>Acromion</summary>
+					Method:<select disabled id="acromionmethod" name="method">
+						<option value="absolute">Absolute</option>
+						<option value="relative" selected>Relative</option>
+					</select>
+					Parent X: (Bounding Box). Parent Y: (Bounding Box - Hips)
+					<!--Blend Complex-->
+					<form class="block" name="blendcomplex">
+						<strong>Blend Complex</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=1.11 min=0 ></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.62 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.09 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.02 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=0.82 min=0></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.53 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=1.38 min=0></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=0.69 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Blend Simple-->
+					<form class="block" name="blendsimple">
+						<strong>Blend Simple</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=1.11 min=0></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.62 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.07 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.02 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=0.87 min=0></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.54 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=1.36 min=0></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=0.68 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Female-->
+					<form class="block" name="female">
+						<strong>Female</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=1.06 min=0></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.61 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.07 min=0></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.02 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=0.82 min=0 ></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.53 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=1.34 min=0 ></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=0.68 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Male-->
+					<form class="block" name="male">
+						<strong>Male</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=1.16 min=0></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.62 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.07 min=0></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.02 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=0.91 min=0></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.56 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=1.38 min=0></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=0.69 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+				   </details>
+				   
+	<!--Knee-->
+				<details id="knee">
+					<summary>Knee</summary>
+					Method:<select disabled id="kneemethod" name="method">
+						<option value="absolute">Absolute</option>
+						<option value="relative" selected>Relative</option>
+					</select>
+					Parent x = Hips[x], Y = Hips[y]
+				<!--Blend Complex-->
+				<form class="block" name="blendcomplex">
+					<strong>Blend Complex</strong><br>
+						<ul>
+							<li>X-Num : <input  type="number" name="x" value=0.35 min=0 max=1></input>*<br></li>
+							<li>Y-Num : <input  type="number" name="y" value=0.54 min=0 max=1></input>*<br></li>
+							<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+						</ul>
+						<ul>
+							<li>X-SDv : <input  type="number" name="x_sd" value=0.02 min=0 max=1></input>*<br></li>
+							<li>Y-SDv : <input  type="number" name="y_sd" value=0.01 min=0 max=1></input>*<br></li>
+							<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+						</ul>
+						<ul>
+							<li>X-Min : <input  type="number" name="x_min" value=0.27 min=0 max=1></input>*<br></li>
+							<li>Y-Min : <input  type="number" name="y_min" value=0.49 min=0 max=1></input>*<br></li>
+							<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+						</ul>
+						<ul>
+							<li>X-Max : <input  type="number" name="x_max" value=0.42 min=0 max=1></input>*<br></li>
+							<li>Y-Max : <input  type="number" name="y_max" value=0.58 min=0 max=1></input>*<br></li>
+							<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+						</ul>
+				</form>
+				<!--Blend Simple-->
+				<form class="block" name="blendsimple">
+					<strong>Blend Simple</strong><br>
+						<ul>
+							<li>X-Num : <input  type="number" name="x" value=0.35 min=0 max=1></input>*<br></li>
+							<li>Y-Num : <input  type="number" name="y" value=0.54 min=0 max=1></input>*<br></li>
+							<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+						</ul>
+						<ul>
+							<li>X-SDv : <input  type="number" name="x_sd" value=0.02 min=0 max=1></input>*<br></li>
+							<li>Y-SDv : <input  type="number" name="y_sd" value=0.01 min=0 max=1></input>*<br></li>
+							<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+						</ul>
+						<ul>
+							<li>X-Min : <input  type="number" name="x_min" value=0.29 min=0 max=1></input>*<br></li>
+							<li>Y-Min : <input  type="number" name="y_min" value=0.49 min=0 max=1></input>*<br></li>
+							<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+						</ul>
+						<ul>
+							<li>X-Max : <input  type="number" name="x_max" value=0.41 min=0 max=1></input>*<br></li>
+							<li>Y-Max : <input  type="number" name="y_max" value=0.58 min=0 max=1></input>*<br></li>
+							<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+						</ul>
+				</form>
+				<!--Female-->
+				<form class="block" name="female">
+					<strong>Female</strong><br>
+						<ul>
+							<li>X-Num : <input  type="number" name="x" value=0.34 min=0 max=1></input>*<br></li>
+							<li>Y-Num : <input  type="number" name="y" value=0.53 min=0 max=1></input>*<br></li>
+							<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+						</ul>
+						<ul>
+							<li>X-SDv : <input  type="number" name="x_sd" value=0.02 min=0 max=1></input>*<br></li>
+							<li>Y-SDv : <input  type="number" name="y_sd" value=0.01 min=0 max=1></input>*<br></li>
+							<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+						</ul>
+						<ul>
+							<li>X-Min : <input  type="number" name="x_min" value=0.27 min=0 max=1></input>*<br></li>
+							<li>Y-Min : <input  type="number" name="y_min" value=0.49 min=0 max=1></input>*<br></li>
+							<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+						</ul>
+						<ul>
+							<li>X-Max : <input  type="number" name="x_max" value=0.41 min=0 max=1></input>*<br></li>
+							<li>Y-Max : <input  type="number" name="y_max" value=0.57 min=0 max=1></input>*<br></li>
+							<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+						</ul>
+				</form>
+				<!--Male-->
+				<form class="block" name="male">
+					<strong>Male</strong><br>
+						<ul>
+							<li>X-Num : <input  type="number" name="x" value=0.36 min=0 max=1></input>*<br></li>
+							<li>Y-Num : <input  type="number" name="y" value=0.54 min=0 max=1></input>*<br></li>
+							<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+						</ul>
+						<ul>
+							<li>X-SDv : <input  type="number" name="x_sd" value=0.01 min=0 max=1></input>*<br></li>
+							<li>Y-SDv : <input  type="number" name="y_sd" value=0.01 min=0 max=1></input>*<br></li>
+							<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+						</ul>
+						<ul>
+							<li>X-Min : <input  type="number" name="x_min" value=0.31 min=0 max=1></input>*<br></li>
+							<li>Y-Min : <input  type="number" name="y_min" value=0.49 min=0 max=1></input>*<br></li>
+							<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+						</ul>
+						<ul>
+							<li>X-Max : <input  type="number" name="x_max" value=0.42 min=0 max=1></input>*<br></li>
+							<li>Y-Max : <input  type="number" name="y_max" value=0.58 min=0 max=1></input>*<br></li>
+							<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+						</ul>
+				</form>
+			   </details>
+			   
+	<!-- Chin -->
+				<details id="chin">
+					<summary>Chin</summary>
+					Method:<select disabled id="chinmethod" name="method">
+						<option value="absolute">Absolute</option>
+						<option value="relative" selected>Relative</option>
+					</select>
+					Parent: x = none, y = height[y] - acromion[y], z = none		
+					<!--Blend Complex-->
+					<form class="block" name="blendcomplex">
+						<strong>Blend Complex</strong><br>
+							<ul>
+								<li>X-Num : <input disabled type="number" name="x" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.23 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input disabled type="number" name="x_sd" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.05 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input disabled type="number" name="x_min" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.04 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input disabled type="number" name="x_max" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=0.38 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Blend Simple-->
+					<form class="block" name="blendsimple">
+						<strong>Blend Simple</strong><br>
+							<ul>
+								<li>X-Num : <input disabled type="number" name="x" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.23 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input disabled type="number" name="x_sd" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.05 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input disabled type="number" name="x_min" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.04 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input disabled type="number" name="x_max" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=0.37 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Female-->
+					<form class="block" name="female">
+						<strong>Female</strong><br>
+							<ul>
+								<li>X-Num : <input disabled type="number" name="x" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.23 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input disabled type="number" name="x_sd" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.05 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input disabled type="number" name="x_min" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.04 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input disabled type="number" name="x_max" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=0.36 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Male-->
+					<form class="block" name="male">
+						<strong>Male</strong><br>
+							<ul>
+								<li>X-Num : <input disabled type="number" name="x" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.22 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input disabled type="number" name="x_sd" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.05 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input disabled type="number" name="x_min" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.04 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input disabled type="number" name="x_max" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=0.38 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+				   </details>
+					
+
+	<!--Face (Zygomatic Arch)-->
+				<details id="face">
+					<summary>Face</summary>
+					Method:<select disabled id="facemethod" name="method">
+						<option value="absolute">Absolute</option>
+						<option value="relative" selected>Relative</option>
+					</select>
+					Parent: x = acromion[x], y = height[y] - acromion[y], z = none		   
+					<!--Blend Complex-->
+					<form class="block" name="blendcomplex">
+						<strong>Blend Complex</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=0.39 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.61 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.02 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.03 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=0.32 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.45 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=0.48 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=0.71 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Blend Simple-->
+					<form class="block" name="blendsimple">
+						<strong>Blend Simple</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=0.39 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.61 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.02 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.03 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=0.33 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.48 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=0.47 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=0.7 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Female-->
+					<form class="block" name="female">
+						<strong>Female</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=0.4 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.62 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.02 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.03 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=0.34 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.45 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=0.48 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=0.71 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Male-->
+					<form class="block" name="male">
+						<strong>Male</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=0.38 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.61 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.02 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.03 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=0.32 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.51 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=0.46 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=0.7 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+				   </details>
+
+	<!--Neck -->
+				<details id="neck">
+					<summary>Neck</summary>
+					Method:<select disabled id="neckmethod" name="method">
+						<option value="absolute">Absolute</option>
+						<option value="relative" selected>Relative</option>
+					</select>
+					Parent: x = Face[x], y = face[y] - acrominon[y], z = none
+					<!--Blend Complex-->
+					<form class="block" name="blendcomplex">
+						<strong>Blend Complex</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=0.81 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.35 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.06 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.04 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=0.65 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.17 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=1.02 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=0.5 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Blend Simple-->
+					<form class="block" name="blendsimple">
+						<strong>Blend Simple</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=0.81 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.35 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.04 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.04 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=0.68 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.19 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=0.96 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=0.5 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Female-->
+					<form class="block" name="female">
+						<strong>Female</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=0.76 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.34 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.04 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.04 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=0.65 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.21 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=0.9 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=0.49 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Male-->
+					<form class="block" name="male">
+						<strong>Male</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=0.86 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.35 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.04 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.04 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=0.7 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.17 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=1.02 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=0.5 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+				   </details>
+
+	<!--Waist-->
+				<details id="waist">
+					<summary>Waist</summary>
+					Method:<select disabled id="waistmethod" name="method">
+						<option value="absolute">Absolute</option>
+						<option value="relative" selected>Relative</option>
+					</select>
+					Parent x = hips[x], y = acromion[y] - hips[y]
+					<!--Blend Complex-->
+					<form class="block" name="blendcomplex">
+						<strong>Blend Complex</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=0.87 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.4 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.06 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.04 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=0.69 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.24 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=1.07 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=0.57 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Blend Simple-->
+					<form class="block" name="blendsimple">
+						<strong>Blend Simple</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=0.87 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.4 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.05 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.03 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=0.73 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.26 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=1.07 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=0.52 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Female-->
+					<form class="block" name="female">
+						<strong>Female</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=0.84 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.41 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.06 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.04 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=0.69 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.24 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=1.07 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=0.57 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Male-->
+					<form class="block" name="male">
+						<strong>Male</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=0.9 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.39 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.05 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.03 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=0.77 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.27 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=1.07 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=0.48 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+				   </details>
+	<!--Axilla (Armpit)-->
+				<details id="axilla">
+					<summary>Axilla</summary>
+					Method:<select disabled id="axillamethod" name="method">
+						<option value="absolute">Absolute</option>
+						<option value="relative" selected>Relative</option>
+					</select>
+					Parent: x = acromion, y = acromion[y] - waist[y], z = none
+					<!--Blend Complex-->
+					<form class="block" name="blendcomplex">
+						<strong>Blend Complex</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=0.79 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.63 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.06 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.04 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=0.59 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.49 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=1.03 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=0.76 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Blend Simple-->
+					<form class="block" name="blendsimple">
+						<strong>Blend Simple</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=0.79 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.63 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.06 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.03 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=0.62 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.5 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=1.01 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=0.74 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Female-->
+					<form class="block" name="female">
+						<strong>Female</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=0.77 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.64 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.05 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.03 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=0.59 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.52 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=0.98 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=0.76 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Male-->
+					<form class="block" name="male">
+						<strong>Male</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=0.81 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.61 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.06 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.03 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=0.65 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.49 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=1.03 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=0.72 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+				   </details>
+
+	<!--Chest-->
+				<details id="chest">
+					<summary>Chest</summary>
+					Method:<select disabled id="chestmethod" name="method">
+						<option value="absolute">Absolute</option>
+						<option value="relative" selected>Relative</option>
+					</select>
+					Parent x = Acromion[x], Y = acromion[y] - waist[y]
+					<!--Blend Complex-->
+					<form class="block" name="blendcomplex">
+						<strong>Blend Complex</strong><br>
+							<ul>
+								<li>X-Num : <input disabled type="number" name="x" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.71 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input disabled type="number" name="x_sd" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.11 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input disabled type="number" name="x_min" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.26 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input disabled type="number" name="x_max" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=1.08 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Blend Simple-->
+					<form class="block" name="blendsimple">
+						<strong>Blend Simple</strong><br>
+							<ul>
+								<li>X-Num : <input disabled type="number" name="x" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.72 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input disabled type="number" name="x_sd" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.09 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input disabled type="number" name="x_min" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.35 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input disabled type="number" name="x_max" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=1.05 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Female-->
+					<form class="block" name="female">
+						<strong>Female</strong><br>
+							<ul>
+								<li>X-Num : <input disabled type="number" name="x" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.66 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input disabled type="number" name="x_sd" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.11 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input disabled type="number" name="x_min" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.26 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input disabled type="number" name="x_max" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=1.01 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Male-->
+					<form class="block" name="male">
+						<strong>Male</strong><br>
+							<ul>
+								<li>X-Num : <input disabled type="number" name="x" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.77 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input disabled type="number" name="x_sd" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.07 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input disabled type="number" name="x_min" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.44 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input disabled type="number" name="x_max" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=1.08 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+				   </details>
+
+	<!--Crotch-->
+				<details id="crotch">
+					<summary>Crotch</summary>
+					Method:<select disabled id="crotchmethod" name="method">
+						<option value="absolute">Absolute</option>
+						<option value="relative" selected>Relative</option>
+					</select>
+					Parent x = none, y = hips[y] - knees[y], z = none.
+		<!--Blend Complex-->
+		<form class="block" name="blendcomplex">
+			<strong>Blend Complex</strong><br>
+				<ul>
+					<li>X-Num : <input disabled type="number" name="x" value=0 min=0 max=1></input>*<br></li>
+					<li>Y-Num : <input  type="number" name="y" value=0.78 min=0 max=1></input>*<br></li>
+					<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+				</ul>
+				<ul>
+					<li>X-SDv : <input disabled type="number" name="x_sd" value=0 min=0 max=1></input>*<br></li>
+					<li>Y-SDv : <input  type="number" name="y_sd" value=0.03 min=0 max=1></input>*<br></li>
+					<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+				</ul>
+				<ul>
+					<li>X-Min : <input disabled type="number" name="x_min" value=0 min=0 max=1></input>*<br></li>
+					<li>Y-Min : <input  type="number" name="y_min" value=0.66 min=0 max=1></input>*<br></li>
+					<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+				</ul>
+				<ul>
+					<li>X-Max : <input disabled type="number" name="x_max" value=0 min=0 max=1></input>*<br></li>
+					<li>Y-Max : <input  type="number" name="y_max" value=0.89 min=0 max=1></input>*<br></li>
+					<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+				</ul>
+		</form>
+		<!--Blend Simple-->
+		<form class="block" name="blendsimple">
+			<strong>Blend Simple</strong><br>
+				<ul>
+					<li>X-Num : <input disabled type="number" name="x" value=0 min=0 max=1></input>*<br></li>
+					<li>Y-Num : <input  type="number" name="y" value=0.78 min=0 max=1></input>*<br></li>
+					<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+				</ul>
+				<ul>
+					<li>X-SDv : <input disabled type="number" name="x_sd" value=0 min=0 max=1></input>*<br></li>
+					<li>Y-SDv : <input  type="number" name="y_sd" value=0.03 min=0 max=1></input>*<br></li>
+					<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+				</ul>
+				<ul>
+					<li>X-Min : <input disabled type="number" name="x_min" value=0 min=0 max=1></input>*<br></li>
+					<li>Y-Min : <input  type="number" name="y_min" value=0.67 min=0 max=1></input>*<br></li>
+					<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+				</ul>
+				<ul>
+					<li>X-Max : <input disabled type="number" name="x_max" value=0 min=0 max=1></input>*<br></li>
+					<li>Y-Max : <input  type="number" name="y_max" value=0.88 min=0 max=1></input>*<br></li>
+					<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+				</ul>
+		</form>
+		<!--Female-->
+		<form class="block" name="female">
+			<strong>Female</strong><br>
+				<ul>
+					<li>X-Num : <input disabled type="number" name="x" value=0 min=0 max=1></input>*<br></li>
+					<li>Y-Num : <input  type="number" name="y" value=0.78 min=0 max=1></input>*<br></li>
+					<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+				</ul>
+				<ul>
+					<li>X-SDv : <input disabled type="number" name="x_sd" value=0 min=0 max=1></input>*<br></li>
+					<li>Y-SDv : <input  type="number" name="y_sd" value=0.03 min=0 max=1></input>*<br></li>
+					<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+				</ul>
+				<ul>
+					<li>X-Min : <input disabled type="number" name="x_min" value=0 min=0 max=1></input>*<br></li>
+					<li>Y-Min : <input  type="number" name="y_min" value=0.66 min=0 max=1></input>*<br></li>
+					<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+				</ul>
+				<ul>
+					<li>X-Max : <input disabled type="number" name="x_max" value=0 min=0 max=1></input>*<br></li>
+					<li>Y-Max : <input  type="number" name="y_max" value=0.88 min=0 max=1></input>*<br></li>
+					<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+				</ul>
+		</form>
+		<!--Male-->
+		<form class="block" name="male">
+			<strong>Male</strong><br>
+				<ul>
+					<li>X-Num : <input disabled type="number" name="x" value=0 min=0 max=1></input>*<br></li>
+					<li>Y-Num : <input  type="number" name="y" value=0.78 min=0 max=1></input>*<br></li>
+					<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+				</ul>
+				<ul>
+					<li>X-SDv : <input disabled type="number" name="x_sd" value=0 min=0 max=1></input>*<br></li>
+					<li>Y-SDv : <input  type="number" name="y_sd" value=0.03 min=0 max=1></input>*<br></li>
+					<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+				</ul>
+				<ul>
+					<li>X-Min : <input disabled type="number" name="x_min" value=0 min=0 max=1></input>*<br></li>
+					<li>Y-Min : <input  type="number" name="y_min" value=0.67 min=0 max=1></input>*<br></li>
+					<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+				</ul>
+				<ul>
+					<li>X-Max : <input disabled type="number" name="x_max" value=0 min=0 max=1></input>*<br></li>
+					<li>Y-Max : <input  type="number" name="y_max" value=0.89 min=0 max=1></input>*<br></li>
+					<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+				</ul>
+		</form>
+	   </details>
+	   
+	   <!--Knee Top-->
+				<details id="kneeupper">
+					<summary>Knee Upper</summary>
+					Method:<select disabled id="kneeuppermethod" name="method">
+						<option value="absolute">Absolute</option>
+						<option value="relative" selected>Relative</option>
+					</select>
+					Parent x = hips[x] - knees[x], y = hips[y] - knees[y], z = none.
+					<!--Blend Complex-->
+					<form class="block" name="blendcomplex">
+						<strong>Blend Complex</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=0.01 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.14 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.01 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.02 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=-0.03 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.07 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=0.06 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=0.21 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Blend Simple-->
+					<form class="block" name="blendsimple">
+						<strong>Blend Simple</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=0.01 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.13 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.01 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.02 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=-0.03 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.07 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=0.06 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=0.2 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Female-->
+					<form class="block" name="female">
+						<strong>Female</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=0.02 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.14 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.01 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.02 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=-0.02 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.07 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=0.06 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=0.21 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Male-->
+					<form class="block" name="male">
+						<strong>Male</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=0.01 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.13 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.01 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.02 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=-0.03 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.07 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=0.06 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=0.2 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+				   </details>
+
+		<!--Thigh-->
+				<details id="thigh">
+					<summary>Thigh</summary>
+					Method:<select disabled id="thighmethod" name="method">
+						<option value="absolute">Absolute</option>
+						<option value="relative" selected>Relative</option>
+					</select>
+					Parent x = hips[x] - knees[x], y = hips[y] - knees[y], z = none.
+					<!--Blend Complex-->
+					<form class="block" name="blendcomplex">
+						<strong>Blend Complex</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=0.3 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input disabled type="number" name="y" value=0 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.04 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input disabled type="number" name="y_sd" value=0 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=0.16 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input disabled type="number" name="y_min" value=0 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=0.44 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input disabled type="number" name="y_max" value=0 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Blend Simple-->
+					<form class="block" name="blendsimple">
+						<strong>Blend Simple</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=0.3 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input disabled type="number" name="y" value=0 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.04 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input disabled type="number" name="y_sd" value=0 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=0.17 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input disabled type="number" name="y_min" value=0 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=0.43 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input disabled type="number" name="y_max" value=0 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Female-->
+					<form class="block" name="female">
+						<strong>Female</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=0.3 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input disabled type="number" name="y" value=0 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.03 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input disabled type="number" name="y_sd" value=0 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=0.18 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input disabled type="number" name="y_min" value=0 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=0.44 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input disabled type="number" name="y_max" value=0 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Male-->
+					<form class="block" name="male">
+						<strong>Male</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=0.31 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input disabled type="number" name="y" value=0 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.04 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input disabled type="number" name="y_sd" value=0 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=0.16 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input disabled type="number" name="y_min" value=0 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=0.43 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input disabled type="number" name="y_max" value=0 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+				   </details>
+		<!--Heel-->
+				<details id="heel">
+					<summary>Heel</summary>
+					Method:<select disabled id="heelmethod" name="method">
+						<option value="absolute">Absolute</option>
+						<option value="relative" selected>Relative</option>
+					</select>
+					Parent x = knees[x], y = none, z = none
+		<!--Blend Complex-->
+		<form class="block" name="blendcomplex">
+			<strong>Blend Complex</strong><br>
+				<ul>
+					<li>X-Num : <input  type="number" name="x" value=0.56 min=0 max=1></input>*<br></li>
+					<li>Y-Num : <input disabled type="number" name="y" value=0 min=0 max=1></input>*<br></li>
+					<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+				</ul>
+				<ul>
+					<li>X-SDv : <input  type="number" name="x_sd" value=0.04 min=0 max=1></input>*<br></li>
+					<li>Y-SDv : <input disabled type="number" name="y_sd" value=0 min=0 max=1></input>*<br></li>
+					<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+				</ul>
+				<ul>
+					<li>X-Min : <input  type="number" name="x_min" value=0.43 min=0 max=1></input>*<br></li>
+					<li>Y-Min : <input disabled type="number" name="y_min" value=0 min=0 max=1></input>*<br></li>
+					<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+				</ul>
+				<ul>
+					<li>X-Max : <input  type="number" name="x_max" value=0.75 min=0 max=1></input>*<br></li>
+					<li>Y-Max : <input disabled type="number" name="y_max" value=0 min=0 max=1></input>*<br></li>
+					<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+				</ul>
+		</form>
+		<!--Blend Simple-->
+		<form class="block" name="blendsimple">
+			<strong>Blend Simple</strong><br>
+				<ul>
+					<li>X-Num : <input  type="number" name="x" value=0.56 min=0 max=1></input>*<br></li>
+					<li>Y-Num : <input disabled type="number" name="y" value=0 min=0 max=1></input>*<br></li>
+					<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+				</ul>
+				<ul>
+					<li>X-SDv : <input  type="number" name="x_sd" value=0.04 min=0 max=1></input>*<br></li>
+					<li>Y-SDv : <input disabled type="number" name="y_sd" value=0 min=0 max=1></input>*<br></li>
+					<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+				</ul>
+				<ul>
+					<li>X-Min : <input  type="number" name="x_min" value=0.44 min=0 max=1></input>*<br></li>
+					<li>Y-Min : <input disabled type="number" name="y_min" value=0 min=0 max=1></input>*<br></li>
+					<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+				</ul>
+				<ul>
+					<li>X-Max : <input  type="number" name="x_max" value=0.73 min=0 max=1></input>*<br></li>
+					<li>Y-Max : <input disabled type="number" name="y_max" value=0 min=0 max=1></input>*<br></li>
+					<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+				</ul>
+		</form>
+		<!--Female-->
+		<form class="block" name="female">
+			<strong>Female</strong><br>
+				<ul>
+					<li>X-Num : <input  type="number" name="x" value=0.54 min=0 max=1></input>*<br></li>
+					<li>Y-Num : <input disabled type="number" name="y" value=0 min=0 max=1></input>*<br></li>
+					<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+				</ul>
+				<ul>
+					<li>X-SDv : <input  type="number" name="x_sd" value=0.04 min=0 max=1></input>*<br></li>
+					<li>Y-SDv : <input disabled type="number" name="y_sd" value=0 min=0 max=1></input>*<br></li>
+					<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+				</ul>
+				<ul>
+					<li>X-Min : <input  type="number" name="x_min" value=0.43 min=0 max=1></input>*<br></li>
+					<li>Y-Min : <input disabled type="number" name="y_min" value=0 min=0 max=1></input>*<br></li>
+					<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+				</ul>
+				<ul>
+					<li>X-Max : <input  type="number" name="x_max" value=0.71 min=0 max=1></input>*<br></li>
+					<li>Y-Max : <input disabled type="number" name="y_max" value=0 min=0 max=1></input>*<br></li>
+					<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+				</ul>
+		</form>
+		<!--Male-->
+		<form class="block" name="male">
+			<strong>Male</strong><br>
+				<ul>
+					<li>X-Num : <input  type="number" name="x" value=0.57 min=0 max=1></input>*<br></li>
+					<li>Y-Num : <input disabled type="number" name="y" value=0 min=0 max=1></input>*<br></li>
+					<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+				</ul>
+				<ul>
+					<li>X-SDv : <input  type="number" name="x_sd" value=0.04 min=0 max=1></input>*<br></li>
+					<li>Y-SDv : <input disabled type="number" name="y_sd" value=0 min=0 max=1></input>*<br></li>
+					<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+				</ul>
+				<ul>
+					<li>X-Min : <input  type="number" name="x_min" value=0.46 min=0 max=1></input>*<br></li>
+					<li>Y-Min : <input disabled type="number" name="y_min" value=0 min=0 max=1></input>*<br></li>
+					<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+				</ul>
+				<ul>
+					<li>X-Max : <input  type="number" name="x_max" value=0.75 min=0 max=1></input>*<br></li>
+					<li>Y-Max : <input disabled type="number" name="y_max" value=0 min=0 max=1></input>*<br></li>
+					<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+				</ul>
+		</form>
+	   </details>	   
+		<!--Calf-->
+				<details id="calf">
+					<summary>Calf</summary>
+					Method:<select disabled id="calfmethod" name="method">
+						<option value="absolute">Absolute</option>
+						<option value="relative" selected>Relative</option>
+					</select>
+					Parent x = knees[x], y = knees[y], z = none
+					<!--Blend Complex-->
+					<form class="block" name="blendcomplex">
+						<strong>Blend Complex</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=0.97 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.69 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.04 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.03 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=0.83 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.59 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=1.11 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=0.8 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Blend Simple-->
+					<form class="block" name="blendsimple">
+						<strong>Blend Simple</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=0.97 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.69 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.04 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.03 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=0.84 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.61 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=1.11 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=0.79 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Female-->
+					<form class="block" name="female">
+						<strong>Female</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=0.97 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.69 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.04 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.03 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=0.83 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.59 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=1.11 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=0.8 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Male-->
+					<form class="block" name="male">
+						<strong>Male</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=0.98 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.7 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.04 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.02 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=0.86 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.62 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=1.1 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=0.79 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+				   </details>
+
+		
+	<!--Bideltoid-->
+				<details id="bideltoid">
+					<summary>Bideltoid</summary>
+					Method:<select disabled id="bideltoidmethod" name="method">
+						<option value="absolute">Absolute</option>
+						<option value="relative" selected>Relative</option>
+					</select>
+					Parent X = acromion[x], Y: (Acromion - Axilla) / 2
+					<!--Blend Complex-->
+					<form class="block" name="blendcomplex">
+						<strong>Blend Complex</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=1.21 min=1</input>*<br></li>
+								<li>Y-Num : <input disabled type="number" name="y" value=0 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.06 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input disabled type="number" name="y_sd" value=0 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=1.07 min=1></input>*<br></li>
+								<li>Y-Min : <input disabled type="number" name="y_min" value=0 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=1.5 min=1></input>*<br></li>
+								<li>Y-Max : <input disabled type="number" name="y_max" value=0 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Blend Simple-->
+					<form class="block" name="blendsimple">
+						<strong>Blend Simple</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=1.22 min=1></input>*<br></li>
+								<li>Y-Num : <input disabled type="number" name="y" value=0 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.05 min=0></input>*<br></li>
+								<li>Y-SDv : <input disabled type="number" name="y_sd" value=0 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=1.08 min=1></input>*<br></li>
+								<li>Y-Min : <input disabled type="number" name="y_min" value=0 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=1.48 min=1></input>*<br></li>
+								<li>Y-Max : <input disabled type="number" name="y_max" value=0 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Female-->
+					<form class="block" name="female">
+						<strong>Female</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=1.19 min=1></input>*<br></li>
+								<li>Y-Num : <input disabled type="number" name="y" value=0 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.05 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input disabled type="number" name="y_sd" value=0 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=1.07 min=1></input>*<br></li>
+								<li>Y-Min : <input disabled type="number" name="y_min" value=0 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=1.46 min=1></input>*<br></li>
+								<li>Y-Max : <input disabled type="number" name="y_max" value=0 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Male-->
+					<form class="block" name="male">
+						<strong>Male</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=1.24 min=1></input>*<br></li>
+								<li>Y-Num : <input disabled type="number" name="y" value=0 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.05 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input disabled type="number" name="y_sd" value=0 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=1.1 min=1></input>*<br></li>
+								<li>Y-Min : <input disabled type="number" name="y_min" value=0 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=1.5 min=1></input>*<br></li>
+								<li>Y-Max : <input disabled type="number" name="y_max" value=0 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+				   </details>
+
+	<!--Wrist-->
+				<details id="wrist">
+					<summary>Wrist</summary>
+					Method:<select disabled id="wristmethod" name="method">
+						<option value="absolute">Absolute</option>
+						<option value="relative" selected>Relative</option>
+					</select>
+					Parent x = chest[x], y = span[x]
+					<!--Blend Complex-->
+					<form class="block" name="blendcomplex">
+						<strong>Blend Complex</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=0.12 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=1.02 min=0></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.01 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.05 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=0.09 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.88 min=0></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=0.15 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=1.24 min=0></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Blend Simple-->
+					<form class="block" name="blendsimple">
+						<strong>Blend Simple</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=0.12 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=1.02 min=0></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.01 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.05 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=0.1 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.88 min=0></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=0.15 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=1.22 min=0></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Female-->
+					<form class="block" name="female">
+						<strong>Female</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=0.12 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=1.03 min=0></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.01 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.05 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=0.09 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.88 min=0></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=0.15 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=1.24 min=0></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Male-->
+					<form class="block" name="male">
+						<strong>Male</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=0.12 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=1.01 min=0></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.01 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.04 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=0.1 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.88 min=0></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=0.15 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=1.2 min=0></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+				   </details>
+
+	<!--Elbow-->
+				<details id="elbow">
+					<summary>Elbow</summary>
+					Method:<select disabled id="elbowmethod" name="method">
+						<option value="absolute">Absolute</option>
+						<option value="relative" selected>Relative</option>
+					</select>
+					Parent X = chest[x], Y: span[y]. In this case this gives shoulder to elbow length
+					<!--Blend Complex-->
+					<form class="block" name="blendcomplex">
+						<strong>Blend Complex</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=2.26 min=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.58 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.08 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.01 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=2 min=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.54 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=2.59 min=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=0.65 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Blend Simple-->
+					<form class="block" name="blendsimple">
+						<strong>Blend Simple</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=2.26 min=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.58 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.08 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.01 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=2.01 min=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.54 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=2.57 min=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=0.63 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Female-->
+					<form class="block" name="female">
+						<strong>Female</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=2.25 min=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.58 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.08 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.01 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=2 min=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.54 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=2.56 min=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=0.65 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Male-->
+					<form class="block" name="male">
+						<strong>Male</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=2.27 min=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.58 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.08 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.01 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=2.03 min=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.55 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=2.59 min=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=0.61 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+				   </details>
+
+	<!--Hand-->
+				<details id="hand">
+					<summary>Hand</summary>
+					Method:<select disabled id="handmethod" name="method">
+						<option value="absolute">Absolute</option>
+						<option value="relative" selected>Relative</option>
+					</select>
+					Parent x = wrist[x], parent y = elbow[y] - wrist[y]
+					<!--Blend Complex-->
+					<form class="block" name="blendcomplex">
+						<strong>Blend Complex</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=0.62 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.69 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.03 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.03 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=0.52 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.56 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=0.74 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=0.96 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Blend Simple-->
+					<form class="block" name="blendsimple">
+						<strong>Blend Simple</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=0.62 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.68 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.03 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.03 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=0.53 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.58 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=0.73 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=0.87 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Female-->
+					<form class="block" name="female">
+						<strong>Female</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=0.61 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.7 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.03 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.03 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=0.52 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.6 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=0.72 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=0.96 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Male-->
+					<form class="block" name="male">
+						<strong>Male</strong><br>
+							<ul>
+								<li>X-Num : <input  type="number" name="x" value=0.62 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.67 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input  type="number" name="x_sd" value=0.03 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.03 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input  type="number" name="x_min" value=0.54 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.56 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input  type="number" name="x_max" value=0.74 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=0.77 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+				   </details>
+	<!--Knuckles-->
+				<details id="knuckle">
+					<summary>Hand</summary>
+					Method:<select disabled id="knucklemethod" name="method">
+						<option value="absolute">Absolute</option>
+						<option value="relative" selected>Relative</option>
+					</select>
+					Parent x = none, parent y = hand[y]
+					<!--Blend Complex-->
+					<form class="block" name="blendcomplex">
+						<strong>Blend Complex</strong><br>
+							<ul>
+								<li>X-Num : <input disabled type="number" name="x" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.39 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input disabled type="number" name="x_sd" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.03 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input disabled type="number" name="x_min" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.32 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input disabled type="number" name="x_max" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=0.49 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Blend Simple-->
+					<form class="block" name="blendsimple">
+						<strong>Blend Simple</strong><br>
+							<ul>
+								<li>X-Num : <input disabled type="number" name="x" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.39 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input disabled type="number" name="x_sd" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.03 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input disabled type="number" name="x_min" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.32 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input disabled type="number" name="x_max" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=0.47 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Female-->
+					<form class="block" name="female">
+						<strong>Female</strong><br>
+							<ul>
+								<li>X-Num : <input disabled type="number" name="x" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.39 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input disabled type="number" name="x_sd" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.03 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input disabled type="number" name="x_min" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.33 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input disabled type="number" name="x_max" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=0.49 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Male-->
+					<form class="block" name="male">
+						<strong>Male</strong><br>
+							<ul>
+								<li>X-Num : <input disabled type="number" name="x" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.39 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input disabled type="number" name="x_sd" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.02 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input disabled type="number" name="x_min" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.32 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input disabled type="number" name="x_max" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=0.46 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+				   </details>
+				   
+				   
+				   
+			
+
+	<!--Collarbone-->
+				<details id="supranastale">
+					<summary>Collarbone</summary>
+					Method:<select disabled id="supranastalemethod" name="method">
+						<option value="absolute">Absolute</option>
+						<option value="relative" selected>Relative</option>
+					</select>
+					Parent x = none, parent y = acromion[y] - axilla[y]
+					<!--Blend Complex-->
+					<form class="block" name="blendcomplex">
+						<strong>Blend Complex</strong><br>
+							<ul>
+								<li>X-Num : <input disabled type="number" name="x" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.97 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input disabled type="number" name="x_sd" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.13 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input disabled type="number" name="x_min" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.52 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input disabled type="number" name="x_max" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=1.45 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Blend Simple-->
+					<form class="block" name="blendsimple">
+						<strong>Blend Simple</strong><br>
+							<ul>
+								<li>X-Num : <input disabled type="number" name="x" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.97 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input disabled type="number" name="x_sd" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.13 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input disabled type="number" name="x_min" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.54 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input disabled type="number" name="x_max" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=1.44 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Female-->
+					<form class="block" name="female">
+						<strong>Female</strong><br>
+							<ul>
+								<li>X-Num : <input disabled type="number" name="x" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.97 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input disabled type="number" name="x_sd" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.13 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input disabled type="number" name="x_min" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.52 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input disabled type="number" name="x_max" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=1.44 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+					<!--Male-->
+					<form class="block" name="male">
+						<strong>Male</strong><br>
+							<ul>
+								<li>X-Num : <input disabled type="number" name="x" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-Num : <input  type="number" name="y" value=0.97 min=0 max=1></input>*<br></li>
+								<li>Z-Num : <input disabled type="number" name="z" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-SDv : <input disabled type="number" name="x_sd" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-SDv : <input  type="number" name="y_sd" value=0.12 min=0 max=1></input>*<br></li>
+								<li>Z-SDv : <input disabled type="number" name="z_sd" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Min : <input disabled type="number" name="x_min" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-Min : <input  type="number" name="y_min" value=0.56 min=0 max=1></input>*<br></li>
+								<li>Z-Min : <input disabled type="number" name="z_min" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+							<ul>
+								<li>X-Max : <input disabled type="number" name="x_max" value=0 min=0 max=1></input>*<br></li>
+								<li>Y-Max : <input  type="number" name="y_max" value=1.45 min=0 max=1></input>*<br></li>
+								<li>Z-Max : <input disabled type="number" name="z_max" value=0 min=0 max=1></input>*<br></li>
+							</ul>
+					</form>
+				</details>
+			</details>
+			<input type="submit" value"hello"="" onclick="drawHuman()">
+		</section>
+
+    </main>
+
+    <footer>
+    <h2>Data Sources</h2>
+	The above data was generated from landmark data from ANSUR 1988 - an anthropometry study of US Army Personnel, which is available from here: <a href="http://mreed.umtri.umich.edu/mreed/downloads.html">http://mreed.umtri.umich.edu/mreed/downloads.html</a>
+    </footer>
+        
+    <script type = "text/javascript" charset="utf-8">
+    </script>
+
+</body></html>
